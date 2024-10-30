@@ -1,11 +1,12 @@
 //
-//I had a skeleton of the basic trie but it was really basic and I just needed to restart, not sure if im doing this right
+//
 //
 #pragma once
 #include<string>
 #include "Node.h"
 #include<iostream>
 using namespace std;
+
 
 
 class LibraryTrie
@@ -63,7 +64,7 @@ public:
 	}
 
 
-	bool FindBook(const string* title)
+	bool FindBook(Node* root, const string* title)
 	{
 
 		Node* p = root;
@@ -97,7 +98,61 @@ public:
 
 	}
 
+	
+	bool DeleteBook(Node* root, string& title)
+	{
+		Node* currentNode = root;
+		Node* lastBranchNode = NULL;
+		char lastBranchChar = 'a';
 
+		for (auto c : title) {
+			if (currentNode->children[c - 'a'] == NULL) {
+				return false;
+			}
+			else {
+				int count = 0;
+				for (int i = 0; i < 26; i++) {
+					if (currentNode->children[i] != NULL)
+						count++;
+				}
+
+				if (count > 1) {
+					lastBranchNode = currentNode;
+					lastBranchChar = c;
+				}
+				currentNode = currentNode->children[c - 'a'];
+			}
+		}
+
+		int count = 0;
+		for (int i = 0; i < 26; i++) {
+			if (currentNode->children[i] != NULL)
+				count++;
+		}
+
+		// Case 1: The deleted word is a prefix of other words
+		// in Trie.
+		if (count > 0) 
+		{
+			currentNode->book_number--;
+			return true;
+		}
+
+		// Case 2: The deleted word shares a common prefix with
+		// other words in Trie.
+		if (lastBranchNode != NULL) 
+		{
+			lastBranchNode->children[lastBranchChar] = NULL;
+			return true;
+		}
+		// Case 3: The deleted word does not share any common
+		// prefix with other words in Trie.
+		else 
+		{
+			root->children[title[0]] = NULL;
+			return true;
+		}
+	}
 
 
 

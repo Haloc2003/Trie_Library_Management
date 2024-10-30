@@ -13,6 +13,7 @@ public:
 	string author;
 	string genre;
 	int year;
+	int book_number;
 
 
 	Node()
@@ -24,7 +25,7 @@ public:
 
 		for (int i = 0; i < 26; i++)
 		{
-			children[i] = nullptr;				
+			children[i] = NULL;				
 		}
 	}
 
