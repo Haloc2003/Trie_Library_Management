@@ -7,7 +7,7 @@ class Node
 {
 
 public:
-	Node* children[26];			
+	Node* children[95];			
 	bool endOfWord;
 	int pageNumber;
 	string author;
@@ -21,7 +21,7 @@ public:
 		endOfWord = false;
 		
 
-		for (int i = 0; i < 26; i++)
+		for (int i = 0; i < 95; i++)
 		{
 			children[i] = NULL;				
 		}
