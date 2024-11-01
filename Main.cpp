@@ -1,5 +1,3 @@
-
-
 #include <iostream>
 #include <string>
 #include "LibraryTrie.h"
@@ -9,38 +7,56 @@ using namespace std;
 int main()
 {
 	string title, author, genre;
-	int page_number, release_date, choice = 0;
+	int page_number, release_date;
+	int choice = 0;
 	LibraryTrie library;
 
-	while (choice != 1)
+	
+	while (choice != 3)
 	{
-		cout << "Enter Title: ";
-		getline(cin, title);
 
-		cout << "Enter Author: ";
-		getline(cin, author);
-
-		cout << "Enter Genre: ";
-		getline(cin, genre);
-		cin.ignore();
-
-		cout << "Enter Page Number: ";
-		cin >> page_number;
-
-		cout << "Enter Release Year: ";
-		cin >> release_date;
-
-		library.NewBook(title, author, genre, release_date, page_number);//////////
-
-		cout << "Would you like to enter another book? (1 if no, 2 if yes): ";
+		cout << "Would you like to add a book or search a book?: " << "\n" << "1. To add a new book. " << "\n" << "2. To search a book. " << "\n" << "3. To quit. " << endl;
 		cin >> choice;
 
+		if (choice == 3)
+			break;
+
+		if (choice == 1)
+		{
+			cin.ignore();
+			cout << "Enter Title: ";
+			getline(cin, title);
+
+			cout << "Enter author: ";
+			getline(cin, author);
+
+			cout << "Enter genre: ";
+			getline(cin, genre);
+
+			cout << "Enter release date: ";
+			cin >> release_date;
+
+			std::cout << "Enter page number: ";
+			std::cin >> page_number;
+
+			library.NewBook(title, author, genre, release_date, page_number);
+
+			choice = 0;
+		}
+
+		if (choice == 2)
+		{
+			string searchTitle;
+			cin.ignore();
+			cout << "Enter a book title to serach: ";
+			getline(cin, searchTitle);
+
+			library.printBookInfo(searchTitle);
+
+			choice = 0;
+
+		}
+
 	}
-
-
-		
-
-
-
 
 }
