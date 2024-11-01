@@ -1,6 +1,4 @@
-//
-//
-//
+
 #pragma once
 #include<string>
 #include "Node.h"
@@ -15,6 +13,16 @@ class LibraryTrie
 private:
 
 	Node* root;
+
+	//This is the new index for ASCII characters instead of just lowercase 
+	int getCharIndex(char c)
+	{
+		if (c >= 32 && c <= 126)
+		{
+			return c - 32;
+		}
+		return -1;  //if outside range
+	}
 
 public:
 
@@ -32,10 +40,10 @@ public:
 
 		for (char c : title)
 		{
+			int index = getCharIndex(c);      //this has changed with the new function
 
+			if (index == -1) continue;
 			
-			int index = tolower(c) - 'a';
-
 			if (p->children[index] == nullptr)  
 			{
 				p->children[index] = new Node();
@@ -63,9 +71,9 @@ public:
 		for (char c : title)
 		{
 
-			int index = tolower(c) - 'a';
+			int index = getCharIndex(c);
 
-			if (p->children[index] == nullptr)		//checking to see if title exists
+			if (index == -1 || p->children[index] == nullptr)		//checking to see if title exists
 			{
 				return false;
 			}
@@ -84,8 +92,8 @@ public:
 
 		for (char c : title)
 		{
-			int index = tolower(c) - 'a';
-			if (p->children[index] == nullptr)
+			int index = getCharIndex(c);
+			if (index == -1 || p->children[index] == nullptr)
 			{
 				cout << "Book not found." << endl;
 				return;
