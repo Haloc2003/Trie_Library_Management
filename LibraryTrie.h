@@ -5,6 +5,7 @@
 #include<string>
 #include "Node.h"
 #include<iostream>
+#include<cctype>
 using namespace std;
 
 
@@ -23,26 +24,19 @@ public:
 	}
 
 	//insert title into trie
-	void NewBook(const string* title, const string* author, const string* genre, int* year, int* pageNumber)  //added year, im not sure about reading level
+	void NewBook(const string& title, const string& author, const string& genre, int year, int pageNumber)  //added year, im not sure about reading level
 	{
 
 		Node* p = root;
 
 
-		for (int i = 0; i < title->length(); i++)
+		for (char c : title)
 		{
 
-			char ch = tolower((*title)[i]);
-			int index = ch - 'a';
+			
+			int index = tolower(c) - 'a';
 
-			if (index < 0 || index >= 26)  //making sure in range
-			{
-				continue;
-			}
-
-
-
-			if (p->children[index] == nullptr)
+			if (p->children[index] == nullptr)  
 			{
 				p->children[index] = new Node();
 			}
@@ -51,52 +45,68 @@ public:
 
 		}
 
-
-		//dereferencing to get values
-
 		p->endOfWord = true;
-		p->pageNumber = *pageNumber;
-		p->author = *author;
-		p->genre = *genre;
-		p->year = *year;
+		p->pageNumber = pageNumber;
+		p->author = author;
+		p->genre = genre;
+		p->year = year;
 
 
 	}
 
 
-	bool FindBook(Node* root, const string* title)
+	bool FindBook(const string& title)
 	{
 
 		Node* p = root;
 
-		for (int i = 0; i < title->length(); i++)
+		for (char c : title)
 		{
 
-			int index = tolower((*title)[i]) - 'a';
+			int index = tolower(c) - 'a';
 
 			if (p->children[index] == nullptr)		//checking to see if title exists
 			{
 				return false;
 			}
-			p = p->children[i];
+			p = p->children[index];
 
 		}
 
-		if (p != nullptr && p->endOfWord)
-		{
-
-			cout << "Title: " << *title << endl;        // Dereferencee to print 
-			cout << "Author: " << p->author << endl;
-			cout << "Genre: " << p->genre << endl;
-			cout << "Year: " << p->year << endl;
-			cout << "Page Number: " << p->pageNumber << endl;
-			return true;
-
-		}
-
-		return false; //if the title isnt found
+		return p->endOfWord;
 
 	}
+
+
+	void printBookInfo(const string& title)
+	{
+		Node* p = root;
+
+		for (char c : title)
+		{
+			int index = tolower(c) - 'a';
+			if (p->children[index] == nullptr)
+			{
+				cout << "Book not found." << endl;
+				return;
+			}
+			p = p->children[index];
+		}
+
+		if (p->endOfWord)
+		{
+			cout << "Title: " << title << std::endl;
+			cout << "Author: " << p->author << std::endl;
+			cout << "Genre: " << p->genre << std::endl;
+			cout << "Year: " << p->year << std::endl;
+			cout << "Page Number: " << p->pageNumber << std::endl;
+		}
+		else {
+			cout << "Book not found." << std::endl;
+		}
+
+	}
+	
 
 	
 	bool DeleteBook(Node* root, string& title)
