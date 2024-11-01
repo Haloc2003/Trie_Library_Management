@@ -19,14 +19,18 @@ public:
 	Node()
 	{
 		endOfWord = false;
-		pageNumber = -1;
-
-		int year = -1;
+		
 
 		for (int i = 0; i < 26; i++)
 		{
 			children[i] = NULL;				
 		}
+
+		author = "";
+		genre = "";
+		year = 0;
+		pageNumber = 0;
+		
 	}
 
 };
