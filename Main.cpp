@@ -36,8 +36,9 @@ int main()
 			cout << "Enter release date: ";
 			cin >> release_date;
 
-			std::cout << "Enter page number: ";
-			std::cin >> page_number;
+			cout << "Enter page number: ";
+			cin >> page_number;
+			cout << newl;
 
 			library.NewBook(title, author, genre, release_date, page_number);
 
