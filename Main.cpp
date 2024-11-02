@@ -11,14 +11,17 @@ int main()
 	int choice = 0;
 	LibraryTrie library;
 
-	
-	while (choice != 3)
+
+
+
+	while (choice != 5)
 	{
 
-		cout << "Would you like to add a book or search a book?: " << "\n" << "1. To add a new book. " << "\n" << "2. To search a book. " << "\n" << "3. To quit. " << endl;
+		cout << "Would you like to add a book or search a book?: " << "\n" << "1. To add a new book. " << "\n" << "2. To search a book. " << "\n" << "3. To print all book titles. ";
+		cout << "\n" << "4. To delete a book(placeholder)" << "\n" << "5. To quit." << endl;
 		cin >> choice;
 
-		if (choice == 3)
+		if (choice == 5)
 			break;
 
 		if (choice == 1)
@@ -40,6 +43,7 @@ int main()
 			cin >> page_number;
 			cout << endl;
 
+
 			library.NewBook(title, author, genre, release_date, page_number);
 
 			choice = 0;
@@ -53,11 +57,27 @@ int main()
 			getline(cin, searchTitle);
 
 			library.printBookInfo(searchTitle);
+			cout << endl;
 
 			choice = 0;
 
 		}
 
+		if (choice == 3)
+		{
+
+			if (library.isEmpty())
+			{
+				cout << "No books found. " << endl;
+			}
+			else
+				library.printAllBooks();
+		}
+
 	}
+
+
+
+
 
 }
