@@ -14,11 +14,11 @@ int main()
 
 
 
-	while (choice != 6)
+	while (choice != 5)
 	{
 
-		cout << "Would you like to add a book, search a book, or edit a book?: " << "\n" << "1. To add a new book. " << "\n" << "2. To search a book. " << "\n" << "3. To print all book titles. ";
-		cout << "\n" << "4. To delete a book" << "\n" << "5. Edit a book" << endl << "6. Quit" << endl;
+		cout << "Would you like to add a book or search a book?: " << "\n" << "1. To add a new book. " << "\n" << "2. To search a book. " << "\n" << "3. To print all book titles. ";
+		cout << "\n" << "4. To delete a book" << "\n" << "5. Edit a book" << "\n" << "6. To quit." << endl;
 		cin >> choice;
 
 		if (choice == 6)
@@ -36,12 +36,16 @@ int main()
 			cout << "Enter genre: ";
 			getline(cin, genre);
 
+
+			//adding error handling
 			do
 			{
-				cout << "Enter release date:";
+				cout << "Enter release year: ";
 				cin >> release_date;
+
 				if (cin.fail())
 				{
+
 					cout << "ERROR, Enter integer: \n";
 
 					cin.clear();
@@ -50,16 +54,37 @@ int main()
 
 					cin >> release_date;
 				}
-			}
 
 
-		while (cin.fail());
+			} while (cin.fail());
 
-		cout << "\n";
 
-		library.NewBook(title, author, genre, release_date, page_number);
+			do
+			{
 
-		choice = 0;
+				cout << "Enter page number: ";
+				cin >> page_number;
+
+
+				if (cin.fail())
+				{
+					cout << "ERROR, Enter integer: \n";
+
+					cin.clear();
+
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+					cin >> page_number;
+
+				}
+
+			} while (cin.fail());
+
+			cout << "\n";
+
+			library.NewBook(title, author, genre, release_date, page_number);
+
+			choice = 0;
 		}
 
 		else if (choice == 2)
@@ -106,11 +131,11 @@ int main()
 			}
 
 			choice = 0;
-			
-			
+
+
 		}
-		else if (choice == 5)
-		{
+		else if (choice == 5) {
+
 			string bookToEdit;
 			cin.ignore();
 			cout << "Enter the title of the book you want to edit: ";
@@ -137,12 +162,20 @@ int main()
 				cout << "Book not found. Cannot edit." << endl;
 			}
 			choice = 0;
-		}
+		
 	}
+}
 
 	return 0;
 
-	}
+	
+	
+
+
+
+
+
+}
 
 
 
