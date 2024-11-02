@@ -18,7 +18,7 @@ int main()
 	{
 
 		cout << "Would you like to add a book or search a book?: " << "\n" << "1. To add a new book. " << "\n" << "2. To search a book. " << "\n" << "3. To print all book titles. ";
-		cout << "\n" << "4. To delete a book(placeholder)" << "\n" << "5. To quit." << endl;
+		cout << "\n" << "4. To delete a book" << "\n" << "5. To quit." << endl;
 		cin >> choice;
 
 		if (choice == 5)
@@ -72,6 +72,29 @@ int main()
 			}
 			else
 				library.printAllBooks();
+
+			choice = 0;
+		}
+
+		if (choice == 4)
+		{
+			string bookToDelete;
+			cin.ignore();
+			cout << "Enter the title of the book you want to delete: " << endl;
+			getline(cin, bookToDelete);
+
+			if (library.DeleteBook(bookToDelete))
+			{
+				cout << "Book Deleted. " << "\n";
+			}
+			else
+			{
+				cout << "Book not found. " << "\n";
+			}
+
+			choice = 0;
+			
+			
 		}
 
 	}

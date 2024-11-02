@@ -139,21 +139,25 @@ public:
 	}
 
 	void printAllBooks() const { printAllBooks(root, ""); }
+
 	
-	bool DeleteBook(Node* root, string& title)
+	bool DeleteBook(string& title)
 	{
 		Node* currentNode = root;
-		Node* lastBranchNode = NULL;
-		char lastBranchChar = 'a';
+		Node* lastBranchNode = nullptr;
+		char lastBranchChar = '\0';
 
 		for (auto c : title) {
-			if (currentNode->children[c - 'a'] == NULL) {
+
+			int index = getCharIndex(c);
+
+			if (index == -1 || currentNode->children[index] == nullptr) {
 				return false;
 			}
 			else {
 				int count = 0;
-				for (int i = 0; i < 26; i++) {
-					if (currentNode->children[i] != NULL)
+				for (int i = 0; i < 95; i++) {
+					if (currentNode->children[i] != nullptr)
 						count++;
 				}
 
@@ -161,13 +165,13 @@ public:
 					lastBranchNode = currentNode;
 					lastBranchChar = c;
 				}
-				currentNode = currentNode->children[c - 'a'];
+				currentNode = currentNode->children[index];
 			}
 		}
 
 		int count = 0;
-		for (int i = 0; i < 26; i++) {
-			if (currentNode->children[i] != NULL)
+		for (int i = 0; i < 95; i++) {
+			if (currentNode->children[i] != nullptr)
 				count++;
 		}
 
@@ -175,22 +179,26 @@ public:
 		// in Trie.
 		if (count > 0) 
 		{
-			currentNode->book_number--;
+			currentNode->endOfWord = false;
 			return true;
 		}
 
 		// Case 2: The deleted word shares a common prefix with
 		// other words in Trie.
-		if (lastBranchNode != NULL) 
+		if (lastBranchNode != nullptr) 
 		{
-			lastBranchNode->children[lastBranchChar] = NULL;
+			int lastBranchIndex = getCharIndex(lastBranchChar);
+			delete lastBranchNode->children[lastBranchIndex];
+			lastBranchNode->children[lastBranchIndex] = nullptr;
 			return true;
 		}
 		// Case 3: The deleted word does not share any common
 		// prefix with other words in Trie.
 		else 
 		{
-			root->children[title[0]] = NULL;
+			int rootIndex = getCharIndex(title[0]);
+			delete root->children[rootIndex];
+			root->children[rootIndex] = nullptr;
 			return true;
 		}
 	}
