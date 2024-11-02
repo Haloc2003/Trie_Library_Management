@@ -36,13 +36,51 @@ int main()
 			cout << "Enter genre: ";
 			getline(cin, genre);
 
-			cout << "Enter release date: ";
-			cin >> release_date;
 
-			cout << "Enter page number: ";
-			cin >> page_number;
-			cout << endl;
+			//adding error handling
+			do
+			{
+				cout << "Enter release year: ";
+				cin >> release_date;
 
+				if (cin.fail())
+				{
+					
+					cout << "ERROR, Enter integer: \n";
+					
+					cin.clear();
+
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+					cin >> release_date;
+				}
+
+
+			} while (cin.fail());
+		
+			
+			do
+			{
+
+				cout << "Enter page number: ";
+				cin >> page_number;
+				
+
+				if (cin.fail())
+				{
+					cout << "ERROR, Enter integer: \n";
+
+					cin.clear();
+
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+					cin >> page_number;
+
+				}
+
+			} while (cin.fail());
+
+			cout << "\n";
 
 			library.NewBook(title, author, genre, release_date, page_number);
 
