@@ -115,7 +115,30 @@ public:
 
 	}
 	
+	bool isEmpty()const
+	{
+		for (int i = 0; i < 95; i++)
+		{
+			if (root->children[i] != nullptr)
+				return false;
+		}
+		return true;
+	}
 
+	void printAllBooks(Node* node, string prefix) const
+	{
+		if (node->endOfWord) {
+			cout << prefix << endl;
+		}
+		for (int i = 0; i < 95; i++) {
+			if (node->children[i])
+			{
+				printAllBooks(node->children[i], prefix + char(i + 32));
+			}
+		}
+	}
+
+	void printAllBooks() const { printAllBooks(root, ""); }
 	
 	bool DeleteBook(Node* root, string& title)
 	{
