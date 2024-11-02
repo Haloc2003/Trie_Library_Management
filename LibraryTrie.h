@@ -203,6 +203,35 @@ public:
 		}
 	}
 
+	bool EditBook(const string& title, const string& newAuthor, const string& newGenre, int newYear, int newPageNumber)
+	{
+		Node* p = root;
 
+		for (char c : title)
+		{
+			int index = getCharIndex(c);
+			if (index == -1 || p->children[index] == nullptr)
+			{
+				cout << "Book not found. Cannot edit." << endl;
+				return false;
+			}
+			p = p->children[index];
+		}
+		if (p->endOfWord)
+		{
+			p->author = newAuthor;
+			p->genre = newGenre;
+			p->year = newYear;
+			p->pageNumber = newPageNumber;
+
+			cout << "Book details updated succesfully." << endl;
+			return true;
+		}
+		else
+		{
+			cout << "Book not found. Cannot edit." << endl;
+			return false;
+		}
+	}
 
 };

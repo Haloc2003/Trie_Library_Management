@@ -14,14 +14,14 @@ int main()
 
 
 
-	while (choice != 5)
+	while (choice != 6)
 	{
 
-		cout << "Would you like to add a book or search a book?: " << "\n" << "1. To add a new book. " << "\n" << "2. To search a book. " << "\n" << "3. To print all book titles. ";
-		cout << "\n" << "4. To delete a book" << "\n" << "5. To quit." << endl;
+		cout << "Would you like to add a book, search a book, or edit a book?: " << "\n" << "1. To add a new book. " << "\n" << "2. To search a book. " << "\n" << "3. To print all book titles. ";
+		cout << "\n" << "4. To delete a book" << "\n" << "5. Edit a book" << endl << "6. Quit" << endl;
 		cin >> choice;
 
-		if (choice == 5)
+		if (choice == 6)
 			break;
 
 		if (choice == 1)
@@ -36,20 +36,33 @@ int main()
 			cout << "Enter genre: ";
 			getline(cin, genre);
 
-			cout << "Enter release date: ";
-			cin >> release_date;
+			do
+			{
+				cout << "Enter release date:";
+				cin >> release_date;
+				if (cin.fail())
+				{
+					cout << "ERROR, Enter integer: \n";
 
-			cout << "Enter page number: ";
-			cin >> page_number;
-			cout << endl;
+					cin.clear();
+
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+					cin >> release_date;
+				}
+			}
 
 
-			library.NewBook(title, author, genre, release_date, page_number);
+		while (cin.fail());
 
-			choice = 0;
+		cout << "\n";
+
+		library.NewBook(title, author, genre, release_date, page_number);
+
+		choice = 0;
 		}
 
-		if (choice == 2)
+		else if (choice == 2)
 		{
 			string searchTitle;
 			cin.ignore();
@@ -63,7 +76,7 @@ int main()
 
 		}
 
-		if (choice == 3)
+		else if (choice == 3)
 		{
 
 			if (library.isEmpty())
@@ -76,7 +89,7 @@ int main()
 			choice = 0;
 		}
 
-		if (choice == 4)
+		else if (choice == 4)
 		{
 			string bookToDelete;
 			cin.ignore();
@@ -96,6 +109,38 @@ int main()
 			
 			
 		}
+		else if (choice == 5)
+		{
+			string bookToEdit;
+			cin.ignore();
+			cout << "Enter the title of the book you want to edit: ";
+			getline(cin, bookToEdit);
+
+			cout << "Enter new Author: ";
+			getline(cin, author);
+
+			cout << "Enter new Genre: ";
+			getline(cin, genre);
+			cout << "Enter new Release Date: ";
+			cin >> release_date;
+
+			cout << "Enter new Page Number: ";
+			cin >> page_number;
+			cout << endl;
+
+			if (library.EditBook(bookToEdit, author, genre, release_date, page_number))
+			{
+				cout << "Book details updated successfully." << endl;
+			}
+			else
+			{
+				cout << "Book not found. Cannot edit." << endl;
+			}
+			choice = 0;
+		}
+	}
+
+	return 0;
 
 	}
 
@@ -103,4 +148,3 @@ int main()
 
 
 
-}
