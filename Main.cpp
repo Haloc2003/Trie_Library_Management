@@ -6,173 +6,171 @@ using namespace std;
 
 int main()
 {
-	string title, author, genre;
-	int page_number, release_date;
-	int choice = 0;
-	LibraryTrie library;
+    string title, author, genre;
+    int page_number, release_date;
+    int choice = 0;
+    LibraryTrie library;
 
+    while (choice != 6)
+    {
+        cout << "Library Menu:" << endl;
+        cout << "1. Add a new book" << endl;
+        cout << "2. Search for a book" << endl;
+        cout << "3. Print all book titles" << endl;
+        cout << "4. Delete a book" << endl;
+        cout << "5. Edit a book" << endl;
+        cout << "6. Quit" << endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
 
+        if (choice == 6)
+            break;
 
+        if (choice == 1)
+        {
+            cin.ignore();
+            cout << "Enter Title: ";
+            getline(cin, title);
 
-	while (choice != 6)
-	{
+            cout << "Enter Author: ";
+            getline(cin, author);
 
-		cout << "Would you like to add a book or search a book?: " << "\n" << "1. To add a new book. " << "\n" << "2. To search a book. " << "\n" << "3. To print all book titles. ";
-		cout << "\n" << "4. To delete a book" << "\n" <<"5. To edit a book" "\n"<< "6. To quit." << endl;
-		cin >> choice;
+            cout << "Enter Genre: ";
+            getline(cin, genre);
 
-		if (choice == 6)
-			break;
+            do
+            {
+                cout << "Enter Release Year: ";
+                cin >> release_date;
 
-		if (choice == 1)
-		{
-			cin.ignore();
-			cout << "Enter Title: ";
-			getline(cin, title);
+                if (cin.fail())
+                {
+                    cout << "ERROR: Enter a valid integer." << endl;
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+            } while (cin.fail());
 
-			cout << "Enter author: ";
-			getline(cin, author);
+            do
+            {
+                cout << "Enter Page Number: ";
+                cin >> page_number;
 
-			cout << "Enter genre: ";
-			getline(cin, genre);
+                if (cin.fail())
+                {
+                    cout << "ERROR: Enter a valid integer." << endl;
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+            } while (cin.fail());
 
+            cout << endl;
+            library.NewBook(title, author, genre, release_date, page_number);
+        }
+        else if (choice == 2)
+        {
+            string searchTitle;
+            cin.ignore();
+            cout << "Enter a book title to search: ";
+            getline(cin, searchTitle);
 
-			//adding error handling
-			do
-			{
-				cout << "Enter release year: ";
-				cin >> release_date;
+            library.printBookInfo(searchTitle);
+            cout << endl;
+        }
+        else if (choice == 3)
+        {
+            if (library.isEmpty())
+            {
+                cout << "No books found." << endl;
+            }
+            else
+            {
+                library.printAllBooks();
+            }
+            cout << endl;
+        }
+        else if (choice == 4)
+        {
+            string bookToDelete;
+            cin.ignore();
+            cout << "Enter the title of the book you want to delete: ";
+            getline(cin, bookToDelete);
 
-				if (cin.fail())
-				{
-					
-					cout << "ERROR, Enter integer: \n";
-					
-					cin.clear();
+            if (library.DeleteBook(bookToDelete))
+            {
+                cout << "Book deleted." << endl;
+            }
+            else
+            {
+                cout << "Book not found." << endl;
+            }
+            cout << endl;
+        }
+        else if (choice == 5)
+        {
+            string bookToEdit;
+            cin.ignore();
+            cout << "Enter the title of the book you want to edit: ";
+            getline(cin, bookToEdit);
 
-					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            if (library.FindBook(bookToEdit))
+            {
+                cout << "Enter new Author: ";
+                getline(cin, author);
 
-					cin >> release_date;
-				}
+                cout << "Enter new Genre: ";
+                getline(cin, genre);
 
+                do
+                {
+                    cout << "Enter new Release Year: ";
+                    cin >> release_date;
 
-			} while (cin.fail());
-		
-			
-			do
-			{
+                    if (cin.fail())
+                    {
+                        cout << "ERROR: Enter a valid integer." << endl;
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    }
+                } while (cin.fail());
 
-				cout << "Enter page number: ";
-				cin >> page_number;
-				
+                do
+                {
+                    cout << "Enter new Page Number: ";
+                    cin >> page_number;
 
-				if (cin.fail())
-				{
-					cout << "ERROR, Enter integer: \n";
+                    if (cin.fail())
+                    {
+                        cout << "ERROR: Enter a valid integer." << endl;
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    }
+                } while (cin.fail());
 
-					cin.clear();
+                cout << endl;
 
-					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                if (library.EditBook(bookToEdit, author, genre, release_date, page_number))
+                {
+                    cout << "Book details updated successfully." << endl;
+                }
+                else
+                {
+                    cout << "Failed to update book details." << endl;
+                }
+            }
+            else
+            {
+                cout << "Book not found. Cannot edit." << endl;
+            }
+            cout << endl;
+        }
+        else
+        {
+            cout << "Invalid choice. Please select a valid option." << endl;
+        }
+    }
 
-					cin >> page_number;
-
-				}
-
-			} while (cin.fail());
-
-			cout << "\n";
-
-			library.NewBook(title, author, genre, release_date, page_number);
-
-			choice = 0;
-		}
-
-		if (choice == 2)
-		{
-			string searchTitle;
-			cin.ignore();
-			cout << "Enter a book title to serach: ";
-			getline(cin, searchTitle);
-
-			library.printBookInfo(searchTitle);
-			cout << endl;
-
-			choice = 0;
-
-		}
-
-		if (choice == 3)
-		{
-
-			if (library.isEmpty())
-			{
-				cout << "No books found. " << endl;
-			}
-			else
-				library.printAllBooks();
-
-			choice = 0;
-		}
-
-		if (choice == 4)
-		{
-			string bookToDelete;
-			cin.ignore();
-			cout << "Enter the title of the book you want to delete: " << endl;
-			getline(cin, bookToDelete);
-
-			if (library.DeleteBook(bookToDelete))
-			{
-				cout << "Book Deleted. " << "\n";
-			}
-			else
-			{
-				cout << "Book not found. " << "\n";
-			}
-
-			choice = 0;
-			
-			
-		}
-		else if (choice == 5)
-		{
-			string bookToEdit;
-			cin.ignore();
-			cout << "Enter the title of the book you want to edit: ";
-			getline(cin, bookToEdit);
-
-			cout << "Enter new Author: ";
-			getline(cin, author);
-
-			cout << "Enter new Genre: ";
-			getline(cin, genre);
-			cout << "Enter new Release Date: ";
-			cin >> release_date;
-
-			cout << "Enter new Page Number: ";
-			cin >> page_number;
-			cout << endl;
-
-			if (library.EditBook(bookToEdit, author, genre, release_date, page_number))
-			{
-				cout << "Book details updated successfully." << endl;
-			}
-			else
-			{
-				cout << "Book not found. Cannot edit." << endl;
-			}
-			choice = 0;
-		}
-	}
-
-	return 0;
-
-	}
-
-
-
-	}
-
+    return 0;
 
 
 
