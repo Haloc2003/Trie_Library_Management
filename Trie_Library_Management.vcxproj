@@ -133,6 +133,11 @@
     <ClInclude Include="LibraryTrie.h" />
     <ClInclude Include="Node.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="ImportingFile.txt" />
+    <Text Include="Library.txt" />
+    <Text Include="LibraryInfo.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

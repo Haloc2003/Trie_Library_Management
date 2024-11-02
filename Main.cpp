@@ -14,14 +14,14 @@ int main()
 
 
 
-	while (choice != 5)
+	while (choice != 8)
 	{
 
 		cout << "Would you like to add a book or search a book?: " << "\n" << "1. To add a new book. " << "\n" << "2. To search a book. " << "\n" << "3. To print all book titles. ";
-		cout << "\n" << "4. To delete a book(placeholder)" << "\n" << "5. To quit." << endl;
+		cout << "\n" << "4. To delete a book(placeholder)" << "\n" << "5. Print a book to a the LibraryInfo.txt file.\n" << "6. Print all books to the Library.txt file\n" << "7. Import Book Info from File.\n" << "8. To quit." << endl << "Enter Selection: ";
 		cin >> choice;
 
-		if (choice == 5)
+		if (choice == 8)
 			break;
 
 		if (choice == 1)
@@ -53,7 +53,7 @@ int main()
 		{
 			string searchTitle;
 			cin.ignore();
-			cout << "Enter a book title to serach: ";
+			cout << "Enter a book title to search: ";
 			getline(cin, searchTitle);
 
 			library.printBookInfo(searchTitle);
@@ -73,6 +73,54 @@ int main()
 			else
 				library.printAllBooks();
 		}
+
+		if (choice == 5)
+		{
+			string searchTitle;
+			cin.ignore();
+			cout << "Enter a book title to search: ";
+			getline(cin, searchTitle);
+
+			library.PrintBookInfoToFile(searchTitle);
+			cout << "Printed to File" << endl;
+
+			choice = 0;
+
+		}
+
+		if (choice == 6)
+		{
+
+			if (library.isEmpty())
+			{
+				cout << "No books found. " << endl;
+			}
+			else
+			{
+				library.PrintAllToFile();
+				cout << "Printed to File" << endl;
+			}
+
+			
+		}
+
+		if (choice == 7)
+		{
+			string filename;
+
+			cout << "Enter File Name (include .txt at the end): ";
+			cin.ignore();
+			getline(cin, filename);
+			
+
+			library.ImportFromFile(filename);
+
+			cout << "File imported.\n";
+		}
+
+		system("pause");
+	
+		system("cls");
 
 	}
 

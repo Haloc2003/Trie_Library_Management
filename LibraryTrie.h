@@ -4,6 +4,8 @@
 #include "Node.h"
 #include<iostream>
 #include<cctype>
+#include <fstream>
+#include <string>
 using namespace std;
 
 
@@ -95,7 +97,7 @@ public:
 			int index = getCharIndex(c);
 			if (index == -1 || p->children[index] == nullptr)
 			{
-				cout << "Book not found." << endl;
+				cout << "\nBook not found." << endl;
 				return;
 			}
 			p = p->children[index];
@@ -103,7 +105,7 @@ public:
 
 		if (p->endOfWord)
 		{
-			cout << "Title: " << title << std::endl;
+			cout << "\nTitle: " << title << std::endl;
 			cout << "Author: " << p->author << std::endl;
 			cout << "Genre: " << p->genre << std::endl;
 			cout << "Year: " << p->year << std::endl;
@@ -196,5 +198,108 @@ public:
 	}
 
 
+	// Adds Book Information to a file
+	void PrintBookInfoToFile(string &title)
+	{
+		fstream outfile;
 
+		outfile.open("LibraryInfo.txt");
+
+		Node* p = root;
+
+		for (char c : title)
+		{
+			int index = getCharIndex(c);
+			if (index == -1 || p->children[index] == nullptr)
+			{
+				cout << "Book not found." << endl;
+				return;
+			}
+			p = p->children[index];
+		}
+
+		if (p->endOfWord)
+		{
+			outfile << title << std::endl;
+			outfile << p->author << std::endl;
+			outfile << p->genre << std::endl;
+			outfile << p->year << std::endl;
+			outfile << p->pageNumber << std::endl;
+			outfile << std::endl;
+		}
+		else {
+			cout << "Book not found." << std::endl;
+		}
+
+		outfile.close();
+
+	}
+
+	//Adds all current books to a file
+	void PrintAllToFile(Node* node, string prefix) const
+	{
+		fstream outfile;
+
+		outfile.open("library.txt", std::ofstream::out | std::ofstream::trunc);
+		outfile.close();
+
+
+		outfile.open("Library.txt", std::ios::app);
+
+		if (node->endOfWord) {
+			outfile << prefix << endl;
+		}
+		for (int i = 0; i < 95; i++) {
+			if (node->children[i])
+			{
+				PrintAllToFile(node->children[i], prefix + char(i + 32));
+			}
+		}
+
+		outfile.close();
+	}
+
+	void PrintAllToFile() const { PrintAllToFile(root, ""); }
+
+	// Writes a book from a file to the trie
+	void ImportFromFile(string filename)
+	{
+		string title, author, genre;
+		int page_number, year;
+
+		ifstream infile;
+		infile.open(filename);
+
+		getline(infile, title);
+		getline(infile, author);
+		getline(infile, genre);
+		cin.ignore();
+		infile >> year;
+		infile >> page_number;
+		
+		Node* p = root;
+
+
+		for (char c : title)
+		{
+			int index = getCharIndex(c);      //this has changed with the new function
+
+			if (index == -1) continue;
+
+			if (p->children[index] == nullptr)
+			{
+				p->children[index] = new Node();
+			}
+
+			p = p->children[index];
+
+		}
+
+		p->endOfWord = true;
+		p->pageNumber = page_number;
+		p->author = author;
+		p->genre = genre;
+		p->year = year;
+	}
+		
 };

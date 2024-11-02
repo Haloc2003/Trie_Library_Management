@@ -27,4 +27,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="LibraryInfo.txt" />
+    <Text Include="ImportingFile.txt" />
+    <Text Include="Library.txt" />
+  </ItemGroup>
 </Project>
