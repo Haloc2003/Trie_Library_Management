@@ -14,14 +14,14 @@ int main()
 
 
 
-	while (choice != 5)
+	while (choice != 6)
 	{
 
 		cout << "Would you like to add a book or search a book?: " << "\n" << "1. To add a new book. " << "\n" << "2. To search a book. " << "\n" << "3. To print all book titles. ";
-		cout << "\n" << "4. To delete a book" << "\n" << "5. To quit." << endl;
+		cout << "\n" << "4. To delete a book" << "\n" <<"5. To edit a book" "\n"<< "6. To quit." << endl;
 		cin >> choice;
 
-		if (choice == 5)
+		if (choice == 6)
 			break;
 
 		if (choice == 1)
@@ -134,6 +134,42 @@ int main()
 			
 			
 		}
+		else if (choice == 5)
+		{
+			string bookToEdit;
+			cin.ignore();
+			cout << "Enter the title of the book you want to edit: ";
+			getline(cin, bookToEdit);
+
+			cout << "Enter new Author: ";
+			getline(cin, author);
+
+			cout << "Enter new Genre: ";
+			getline(cin, genre);
+			cout << "Enter new Release Date: ";
+			cin >> release_date;
+
+			cout << "Enter new Page Number: ";
+			cin >> page_number;
+			cout << endl;
+
+			if (library.EditBook(bookToEdit, author, genre, release_date, page_number))
+			{
+				cout << "Book details updated successfully." << endl;
+			}
+			else
+			{
+				cout << "Book not found. Cannot edit." << endl;
+			}
+			choice = 0;
+		}
+	}
+
+	return 0;
+
+	}
+
+
 
 	}
 
