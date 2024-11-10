@@ -5,7 +5,6 @@
 #include<iostream>
 #include<cctype>
 #include <fstream>
-#include <string>
 using namespace std;
 
 
@@ -45,8 +44,8 @@ public:
 			int index = getCharIndex(c);      //this has changed with the new function
 
 			if (index == -1) continue;
-			
-			if (p->children[index] == nullptr)  
+
+			if (p->children[index] == nullptr)
 			{
 				p->children[index] = new Node();
 			}
@@ -97,7 +96,7 @@ public:
 			int index = getCharIndex(c);
 			if (index == -1 || p->children[index] == nullptr)
 			{
-				cout << "\nBook not found." << endl;
+				cout << "Book not found." << endl;
 				return;
 			}
 			p = p->children[index];
@@ -105,7 +104,7 @@ public:
 
 		if (p->endOfWord)
 		{
-			cout << "\nTitle: " << title << std::endl;
+			cout << "Title: " << title << std::endl;
 			cout << "Author: " << p->author << std::endl;
 			cout << "Genre: " << p->genre << std::endl;
 			cout << "Year: " << p->year << std::endl;
@@ -116,7 +115,7 @@ public:
 		}
 
 	}
-	
+
 	bool isEmpty()const
 	{
 		for (int i = 0; i < 95; i++)
@@ -141,21 +140,25 @@ public:
 	}
 
 	void printAllBooks() const { printAllBooks(root, ""); }
-	
-	bool DeleteBook(Node* root, string& title)
+
+
+	bool DeleteBook(string& title)
 	{
 		Node* currentNode = root;
-		Node* lastBranchNode = NULL;
-		char lastBranchChar = 'a';
+		Node* lastBranchNode = nullptr;
+		char lastBranchChar = '\0';
 
 		for (auto c : title) {
-			if (currentNode->children[c - 'a'] == NULL) {
+
+			int index = getCharIndex(c);
+
+			if (index == -1 || currentNode->children[index] == nullptr) {
 				return false;
 			}
 			else {
 				int count = 0;
-				for (int i = 0; i < 26; i++) {
-					if (currentNode->children[i] != NULL)
+				for (int i = 0; i < 95; i++) {
+					if (currentNode->children[i] != nullptr)
 						count++;
 				}
 
@@ -163,43 +166,79 @@ public:
 					lastBranchNode = currentNode;
 					lastBranchChar = c;
 				}
-				currentNode = currentNode->children[c - 'a'];
+				currentNode = currentNode->children[index];
 			}
 		}
 
 		int count = 0;
-		for (int i = 0; i < 26; i++) {
-			if (currentNode->children[i] != NULL)
+		for (int i = 0; i < 95; i++) {
+			if (currentNode->children[i] != nullptr)
 				count++;
 		}
 
 		// Case 1: The deleted word is a prefix of other words
 		// in Trie.
-		if (count > 0) 
+		if (count > 0)
 		{
-			currentNode->book_number--;
+			currentNode->endOfWord = false;
 			return true;
 		}
 
 		// Case 2: The deleted word shares a common prefix with
 		// other words in Trie.
-		if (lastBranchNode != NULL) 
+		if (lastBranchNode != nullptr)
 		{
-			lastBranchNode->children[lastBranchChar] = NULL;
+			int lastBranchIndex = getCharIndex(lastBranchChar);
+			delete lastBranchNode->children[lastBranchIndex];
+			lastBranchNode->children[lastBranchIndex] = nullptr;
 			return true;
 		}
 		// Case 3: The deleted word does not share any common
 		// prefix with other words in Trie.
-		else 
+		else
 		{
-			root->children[title[0]] = NULL;
+			int rootIndex = getCharIndex(title[0]);
+			delete root->children[rootIndex];
+			root->children[rootIndex] = nullptr;
 			return true;
 		}
 	}
 
 
+	bool EditBook(const string& title, const string& newAuthor, const string& newGenre, int newYear, int newPageNumber)
+	{
+		Node* p = root;
+
+		for (char c : title)
+		{
+			int index = getCharIndex(c);
+			if (index == -1 || p->children[index] == nullptr)
+			{
+				cout << "Book not found. Cannot edit." << endl;
+				return false;
+			}
+			p = p->children[index];
+		}
+
+		if (p->endOfWord)
+		{
+			p->author = newAuthor;
+			p->genre = newGenre;
+			p->year = newYear;
+			p->pageNumber = newPageNumber;
+
+			cout << "Book details updated successfully." << endl;
+			return true;
+		}
+		else
+		{
+			cout << "Book not found. Cannot edit." << endl;
+			return false;
+		}
+	}
+
 	// Adds Book Information to a file
-	void PrintBookInfoToFile(string &title)
+	void PrintBookInfoToFile(string& title)
 	{
 		fstream outfile;
 
@@ -276,7 +315,7 @@ public:
 		cin.ignore();
 		infile >> year;
 		infile >> page_number;
-		
+
 		Node* p = root;
 
 
@@ -301,5 +340,4 @@ public:
 		p->genre = genre;
 		p->year = year;
 	}
-		
 };
