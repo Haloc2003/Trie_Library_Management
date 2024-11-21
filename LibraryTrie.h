@@ -141,7 +141,6 @@ public:
 
 	void printAllBooks() const { printAllBooks(root, ""); }
 
-
 	bool DeleteBook(string& title)
 	{
 		Node* currentNode = root;
@@ -186,7 +185,8 @@ public:
 
 		// Case 2: The deleted word shares a common prefix with
 		// other words in Trie.
-		if (lastBranchNode != nullptr)
+
+		if (lastBranchNode != nullptr) 
 		{
 			int lastBranchIndex = getCharIndex(lastBranchChar);
 			delete lastBranchNode->children[lastBranchIndex];
@@ -236,7 +236,6 @@ public:
 			return false;
 		}
 	}
-
 	// Adds Book Information to a file
 	void PrintBookInfoToFile(string& title)
 	{
@@ -340,4 +339,5 @@ public:
 		p->genre = genre;
 		p->year = year;
 	}
+
 };

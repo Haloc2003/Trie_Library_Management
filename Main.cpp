@@ -11,7 +11,7 @@ int main()
     int choice = 0;
     LibraryTrie library;
 
-    while (choice != 6)
+    while (choice != 9)
     {
         cout << "Library Menu:" << endl;
         cout << "1. Add a new book" << endl;
@@ -26,7 +26,7 @@ int main()
         cout << "Enter your choice: ";
         cin >> choice;
 
-        if (choice == 6)
+        if (choice == 9)
             break;
 
         if (choice == 1)
@@ -136,7 +136,6 @@ int main()
                 cout << "Printed to File" << endl;
             }
 
-
         }
 
         if (choice == 7)
@@ -146,12 +145,11 @@ int main()
             cout << "Enter File Name (include .txt at the end): ";
             cin.ignore();
             getline(cin, filename);
-
-
             library.ImportFromFile(filename);
 
             cout << "File imported.\n";
         }
+
         else if (choice == 8)
         {
             string bookToEdit;
