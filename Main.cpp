@@ -212,6 +212,10 @@ int main()
         {
             cout << "Invalid choice. Please select a valid option." << endl;
         }
+
+        system("pause");
+        system("cls");
+
     }
 
     return 0;
