@@ -208,7 +208,7 @@ int main()
             }
             cout << endl;
         }
-        else
+        else if (choice > 9 || choice < 1 )
         {
             cout << "Invalid choice. Please select a valid option." << endl;
         }
