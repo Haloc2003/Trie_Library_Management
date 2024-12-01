@@ -119,7 +119,6 @@ int main()
             library.PrintBookInfoToFile(searchTitle);
             cout << "Printed to File" << endl;
 
-            choice = 0;
 
         }
 
@@ -208,7 +207,7 @@ int main()
             }
             cout << endl;
         }
-        else if (choice > 9 || choice < 1 )
+        else if (choice != 9 && choice != 8 && choice != 7 && choice != 6 && choice != 5 && choice != 4 && choice != 3 && choice != 2 && choice != 1 )
         {
             cout << "Invalid choice. Please select a valid option." << endl;
         }
