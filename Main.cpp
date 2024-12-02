@@ -11,6 +11,9 @@ int main()
     int choice = 0;
     LibraryTrie library;
 
+    //Establishes a library from a text file
+    library.ImportFromFile("BackgroundLibrary.txt");
+
     while (choice != 9)
     {
         cout << "Library Menu:" << endl;
