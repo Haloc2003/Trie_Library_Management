@@ -16,21 +16,11 @@ public:
 	int book_number;
 
 
-	Node()
-	{
-		endOfWord = false;
-		
-
-		for (int i = 0; i < 95; i++)
-		{
-			children[i] = NULL;				
+	Node() : endOfWord(false), year(0), pageNumber(0), book_number(0) , author(""), genre(""){
+		for (int i = 0; i < 95; i++) {
+			children[i] = nullptr;
 		}
-
-		author = "";
-		genre = "";
-		year = 0;
-		pageNumber = 0;
-		
 	}
+	
 
 };

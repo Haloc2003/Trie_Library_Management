@@ -4,6 +4,8 @@
 #include "Node.h"
 #include<iostream>
 #include<cctype>
+#include <vector>
+#include <fstream>
 using namespace std;
 
 
@@ -22,6 +24,22 @@ private:
 			return c - 32;
 		}
 		return -1;  //if outside range
+	}
+
+	void searchBooksByGenre(Node* node, const string& genre, const string& currentTitle, vector<string>& results) const
+	{
+		if (node->endOfWord && node->genre == genre)
+		{
+			results.push_back(currentTitle);
+		}
+		for (int i = 0; i < 95; ++i)
+		{
+			if (node->children[i] != nullptr)
+			{
+				searchBooksByGenre(node->children[i], genre, currentTitle + char(i + 32), results);
+
+			}
+		}
 	}
 
 public:
@@ -43,8 +61,8 @@ public:
 			int index = getCharIndex(c);      //this has changed with the new function
 
 			if (index == -1) continue;
-			
-			if (p->children[index] == nullptr)  
+
+			if (p->children[index] == nullptr)
 			{
 				p->children[index] = new Node();
 			}
@@ -62,6 +80,7 @@ public:
 
 	}
 
+	
 
 	bool FindBook(const string& title)
 	{
@@ -114,7 +133,7 @@ public:
 		}
 
 	}
-	
+
 	bool isEmpty()const
 	{
 		for (int i = 0; i < 95; i++)
@@ -140,7 +159,6 @@ public:
 
 	void printAllBooks() const { printAllBooks(root, ""); }
 
-	
 	bool DeleteBook(string& title)
 	{
 		Node* currentNode = root;
@@ -177,7 +195,7 @@ public:
 
 		// Case 1: The deleted word is a prefix of other words
 		// in Trie.
-		if (count > 0) 
+		if (count > 0)
 		{
 			currentNode->endOfWord = false;
 			return true;
@@ -185,7 +203,8 @@ public:
 
 		// Case 2: The deleted word shares a common prefix with
 		// other words in Trie.
-		if (lastBranchNode != nullptr) 
+
+		if (lastBranchNode != nullptr)
 		{
 			int lastBranchIndex = getCharIndex(lastBranchChar);
 			delete lastBranchNode->children[lastBranchIndex];
@@ -194,7 +213,7 @@ public:
 		}
 		// Case 3: The deleted word does not share any common
 		// prefix with other words in Trie.
-		else 
+		else
 		{
 			int rootIndex = getCharIndex(title[0]);
 			delete root->children[rootIndex];
@@ -235,4 +254,126 @@ public:
 			return false;
 		}
 	}
+	// Adds Book Information to a file
+	void PrintBookInfoToFile(string& title)
+	{
+		fstream outfile;
+
+		outfile.open("LibraryInfo.txt");
+
+		Node* p = root;
+
+		for (char c : title)
+		{
+			int index = getCharIndex(c);
+			if (index == -1 || p->children[index] == nullptr)
+			{
+				cout << "Book not found." << endl;
+				return;
+			}
+			p = p->children[index];
+		}
+
+		if (p->endOfWord)
+		{
+			outfile << title << std::endl;
+			outfile << p->author << std::endl;
+			outfile << p->genre << std::endl;
+			outfile << p->year << std::endl;
+			outfile << p->pageNumber << std::endl;
+			outfile << std::endl;
+		}
+		else {
+			cout << "Book not found." << std::endl;
+		}
+
+		outfile.close();
+
+	}
+
+	//Adds all current books to a file
+	void PrintAllToFile(Node* node, string prefix) const
+	{
+		fstream outfile;
+
+		outfile.open("library.txt", std::ofstream::out | std::ofstream::trunc);
+		outfile.close();
+
+
+		outfile.open("Library.txt", std::ios::app);
+
+		if (node->endOfWord) {
+			outfile << prefix << endl;
+		}
+		for (int i = 0; i < 95; i++) {
+			if (node->children[i])
+			{
+				PrintAllToFile(node->children[i], prefix + char(i + 32));
+			}
+		}
+
+		outfile.close();
+	}
+
+	void PrintAllToFile() const { PrintAllToFile(root, ""); }
+
+	// Writes a book from a file to the trie
+	void ImportFromFile(string filename)
+	{
+		string title, author, genre;
+		int page_number, year;
+
+		ifstream infile;
+		infile.open(filename);
+
+		getline(infile, title);
+		getline(infile, author);
+		getline(infile, genre);
+		cin.ignore();
+		infile >> year;
+		infile >> page_number;
+
+		Node* p = root;
+
+
+		for (char c : title)
+		{
+			int index = getCharIndex(c);      //this has changed with the new function
+
+			if (index == -1) continue;
+
+			if (p->children[index] == nullptr)
+			{
+				p->children[index] = new Node();
+			}
+
+			p = p->children[index];
+
+		}
+
+		p->endOfWord = true;
+		p->pageNumber = page_number;
+		p->author = author;
+		p->genre = genre;
+		p->year = year;
+	}
+	void searchBooksByGenreInput() const {
+		cout << "Enter a genre to search: ";
+		string genre; 
+		getline(cin, genre); 
+		vector<string> results; 
+		searchBooksByGenre(root, genre, "", results); 
+		if (!results.empty()) { 
+			cout << "Books in the genre \"" << genre << "\":" << endl; 
+			for (const string& title : results) 
+			{ 
+				cout << "- " << title << endl; 
+			} 
+		}
+		else { 
+			cout << "No books found in the genre \"" << genre << "\"." << endl; 
+		} 
+	}
+
+
 };
