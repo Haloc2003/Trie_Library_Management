@@ -14,6 +14,7 @@ public:
 	string genre;
 	int year;
 	int book_number;
+	string originalTitle; //keep the original title
 
 
 	Node()
@@ -30,6 +31,7 @@ public:
 		genre = "";
 		year = 0;
 		pageNumber = 0;
+		originalTitle = "";
 		
 	}
 

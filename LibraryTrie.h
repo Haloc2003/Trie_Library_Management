@@ -7,8 +7,17 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
+#include <algorithm>
 using namespace std;
 
+
+//heloper for converting string to lowercase
+string toLowerCase(const string& input)
+{
+	string result = input;
+	transform(result.begin(), result.end(), result.begin(), ::tolower);
+	return result;
+}
 
 
 class LibraryTrie
@@ -20,16 +29,22 @@ private:
 	//This is the new index for ASCII characters instead of just lowercase 
 	int getCharIndex(char c)
 	{
+		c = tolower(c);
 		if (c >= 32 && c <= 126)
 		{
 			return c - 32;
 		}
 		return -1;  //if outside range
+
 	}
+
+
+	
+
 
 	void searchBooksByGenre(Node* node, const string& genre, const string& currentTitle, vector<string>& results) const
 	{
-		if (node->endOfWord && node->genre == genre)
+		if (node->endOfWord && toLowerCase(node->genre) == toLowerCase(genre))
 		{
 			results.push_back(currentTitle);
 		}
@@ -43,6 +58,22 @@ private:
 		}
 	}
 
+	void searchBooksByAuthor(Node* node, const string& author, const string& currentTitle, vector<string>& results) const
+	{
+		if (node->endOfWord && toLowerCase(node->author) == toLowerCase(author)) 
+		{
+			results.push_back(currentTitle);
+		}
+		for (int i = 0; i < 95; ++i) 
+		{
+			if (node->children[i] != nullptr) 
+			{
+				searchBooksByAuthor(node->children[i], author, currentTitle + char(i + 32), results);
+			}
+		}
+	}
+
+
 public:
 
 	LibraryTrie()
@@ -55,9 +86,9 @@ public:
 	{
 
 		Node* p = root;
+		string lowerTitle = toLowerCase(title);
 
-
-		for (char c : title)
+		for (char c : lowerTitle)
 		{
 			int index = getCharIndex(c);      //this has changed with the new function
 
@@ -77,6 +108,7 @@ public:
 		p->author = author;
 		p->genre = genre;
 		p->year = year;
+		p->originalTitle = title;
 
 
 	}
@@ -86,8 +118,9 @@ public:
 	{
 
 		Node* p = root;
+		string lowerTitle = toLowerCase(title);
 
-		for (char c : title)
+		for (char c : lowerTitle)
 		{
 
 			int index = getCharIndex(c);
@@ -111,8 +144,11 @@ public:
 		cout << "Enter a genre to search: ";
 		string genre;
 		getline(cin, genre);
+		genre = toLowerCase(genre);
 		vector<string> results;
+
 		searchBooksByGenre(root, genre, "", results);
+
 		if (!results.empty()) {
 			cout << "Books in the genre \"" << genre << "\":" << endl;
 			for (const string& title : results)
@@ -125,11 +161,39 @@ public:
 		}
 	}
 
+
+	void searchBooksByAuthorInput() const
+	{
+		cout << "Enter an author's name to search: ";
+		string author;
+		getline(cin, author);
+		string lowerAuthor = toLowerCase(author);
+		string upperAuthor = author;
+		vector<string> results;
+		searchBooksByAuthor(root, author, "", results);
+
+		if (!results.empty()) 
+		{
+			cout << "Books by \"" << upperAuthor << "\":" << endl;
+			for (const string& title : results) 
+			{
+				cout << "- " << title << endl;
+			}
+		}
+		else 
+		{
+			cout << "No books found by \"" << upperAuthor << "\"." << endl;
+		}
+	}
+
+
 	void printBookInfo(const string& title)
 	{
 		Node* p = root;
 
-		for (char c : title)
+		string lowerTitle = toLowerCase(title);
+
+		for (char c : lowerTitle)
 		{
 			int index = getCharIndex(c);
 			if (index == -1 || p->children[index] == nullptr)
@@ -142,7 +206,7 @@ public:
 
 		if (p->endOfWord)
 		{
-			cout << "Title: " << title << std::endl;
+			cout << "Title: " << p->originalTitle << std::endl;
 			cout << "Author: " << p->author << std::endl;
 			cout << "Genre: " << p->genre << std::endl;
 			cout << "Year: " << p->year << std::endl;
@@ -167,7 +231,7 @@ public:
 	void printAllBooks(Node* node, string prefix) const
 	{
 		if (node->endOfWord) {
-			cout << prefix << endl;
+			cout << node->originalTitle << endl;
 		}
 		for (int i = 0; i < 95; i++) {
 			if (node->children[i])
