@@ -75,13 +75,46 @@ int main()
         }
         else if (choice == 2)
         {
-            string searchTitle;
-            cin.ignore();
-            cout << "Enter a book title to search: ";
-            getline(cin, searchTitle);
 
-            library.printBookInfo(searchTitle);
-            cout << endl;
+            system("cls");
+
+            int search_choice = 0;
+            cout << "1. Search by Title"
+                << "\n2. Search by Genre"
+                << "\n3. Search by Author";
+            
+
+            while (search_choice != 1 && search_choice != 2 && search_choice != 3)
+            {
+                cout << "\nEnter Choice: ";
+                cin >> search_choice;
+
+                if (search_choice == 1)
+                {
+                    string searchTitle;
+                    cin.ignore();
+                    cout << "\nEnter a book title to search: ";
+                    getline(cin, searchTitle);
+                    library.printBookInfo(searchTitle);
+                    cout << endl;
+                }
+
+                else if (search_choice == 2)
+                {   
+                    cin.ignore();
+                    library.searchBooksByGenreInput();
+                }
+
+                else if (search_choice == 3)
+                {
+
+                }
+
+                else if (search_choice != 1 && search_choice != 2 && search_choice != 3)
+                {
+                    cout << "Error: Not a choice.";
+                }
+            }
         }
         else if (choice == 3)
         {
@@ -91,6 +124,7 @@ int main()
             }
             else
             {
+                cout << endl;
                 library.printAllBooks();
             }
             cout << endl;

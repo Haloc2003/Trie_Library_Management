@@ -2,9 +2,10 @@
 #pragma once
 #include<string>
 #include "Node.h"
-#include<iostream>
-#include<cctype>
+#include <iostream>
+#include <cctype>
 #include <fstream>
+#include <vector>
 #include <sstream>
 using namespace std;
 
@@ -24,6 +25,22 @@ private:
 			return c - 32;
 		}
 		return -1;  //if outside range
+	}
+
+	void searchBooksByGenre(Node* node, const string& genre, const string& currentTitle, vector<string>& results) const
+	{
+		if (node->endOfWord && node->genre == genre)
+		{
+			results.push_back(currentTitle);
+		}
+		for (int i = 0; i < 95; ++i)
+		{
+			if (node->children[i] != nullptr)
+			{
+				searchBooksByGenre(node->children[i], genre, currentTitle + char(i + 32), results);
+
+			}
+		}
 	}
 
 public:
@@ -87,6 +104,26 @@ public:
 
 	}
 
+	
+
+	void searchBooksByGenreInput() const 
+	{
+		cout << "Enter a genre to search: ";
+		string genre;
+		getline(cin, genre);
+		vector<string> results;
+		searchBooksByGenre(root, genre, "", results);
+		if (!results.empty()) {
+			cout << "Books in the genre \"" << genre << "\":" << endl;
+			for (const string& title : results)
+			{
+				cout << "- " << title << endl;
+			}
+		}
+		else {
+			cout << "No books found in the genre \"" << genre << "\"." << endl;
+		}
+	}
 
 	void printBookInfo(const string& title)
 	{
