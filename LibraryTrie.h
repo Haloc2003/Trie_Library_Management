@@ -42,33 +42,68 @@ private:
 	
 
 
-	void searchBooksByGenre(Node* node, const string& genre, const string& currentTitle, vector<string>& results) const
-	{
-		if (node->endOfWord && toLowerCase(node->genre) == toLowerCase(genre))
+	void searchBooksByGenre(Node* node, const string& prefix, string currentGenre, vector<Node*>& results) const {
+		if (node->endOfWord) 
 		{
-			results.push_back(currentTitle);
-		}
-		for (int i = 0; i < 95; ++i)
-		{
-			if (node->children[i] != nullptr)
-			{
-				searchBooksByGenre(node->children[i], genre, currentTitle + char(i + 32), results);
+			string lowerGenre = toLowerCase(node->genre);
+			string lowerPrefix = toLowerCase(prefix);
 
+			
+			if (lowerGenre.find(lowerPrefix) == 0) 
+			{
+				results.push_back(node); 
 			}
 		}
-	}
 
-	void searchBooksByAuthor(Node* node, const string& author, const string& currentTitle, vector<string>& results) const
-	{
-		if (node->endOfWord && toLowerCase(node->author) == toLowerCase(author)) 
-		{
-			results.push_back(currentTitle);
-		}
 		for (int i = 0; i < 95; ++i) 
 		{
 			if (node->children[i] != nullptr) 
 			{
-				searchBooksByAuthor(node->children[i], author, currentTitle + char(i + 32), results);
+				searchBooksByGenre(node->children[i], prefix, currentGenre + char(i + 32), results);
+			}
+		}
+	}
+
+	void searchBooksByAuthor(Node* node, const string& prefix, string currentAuthor, vector<Node*>& results) const 
+	{
+		if (node->endOfWord)
+		{
+			string lowerAuthor = toLowerCase(node->author);
+			string lowerPrefix = toLowerCase(prefix);
+
+
+			if (lowerAuthor.find(lowerPrefix) == 0) {
+				results.push_back(node);
+			}
+		}
+
+		for (int i = 0; i < 95; ++i)
+		{
+			if (node->children[i] != nullptr)
+			{
+				searchBooksByAuthor(node->children[i], prefix, currentAuthor + char(i + 32), results);
+			}
+		}
+	}
+
+	void searchBooksByTitle(Node* node, const string& prefix, string currentTitle, vector<Node*>& results) const
+	{
+		if (node->endOfWord)
+		{
+			string lowerTitle = toLowerCase(node->originalTitle);
+			string lowerPrefix = toLowerCase(prefix);
+
+
+			if (lowerTitle.find(lowerPrefix) == 0) {
+				results.push_back(node);
+			}
+		}
+
+		for (int i = 0; i < 95; ++i)
+		{
+			if (node->children[i] != nullptr)
+			{
+				searchBooksByTitle(node->children[i], prefix, currentTitle + char(i + 32), results);
 			}
 		}
 	}
@@ -141,48 +176,94 @@ public:
 
 	void searchBooksByGenreInput() const 
 	{
-		cout << "Enter a genre to search: ";
-		string genre;
-		getline(cin, genre);
-		genre = toLowerCase(genre);
-		vector<string> results;
+		cout << "Enter the genre to search: ";
+		string prefix;
+		getline(cin, prefix);
 
-		searchBooksByGenre(root, genre, "", results);
+		vector<Node*> results;
+		searchBooksByGenre(root, prefix, "", results);
 
-		if (!results.empty()) {
-			cout << "Books in the genre \"" << genre << "\":" << endl;
-			for (const string& title : results)
+		if (!results.empty()) 
+		{
+			cout << "Results for \"" << prefix << "\":" << endl << endl;
+			for (Node* node : results)
 			{
-				cout << "- " << title << endl;
+				cout << "Title: " << node->originalTitle << endl;
+				cout << "Author: " << node->author << endl;
+				cout << "Genre: " << node->genre << endl;
+				cout << "Year: " << node->year << endl;
+				cout << "Page Number: " << node->pageNumber << endl;
+				cout << "-----------------------------" << endl;
+
 			}
+
 		}
-		else {
-			cout << "No books found in the genre \"" << genre << "\"." << endl;
+		else 
+		{
+			cout << "No books found in genres starting with \"" << prefix << "\"." << endl;
 		}
 	}
 
 
-	void searchBooksByAuthorInput() const
+	void searchBooksByAuthorInput() const 
 	{
-		cout << "Enter an author's name to search: ";
-		string author;
-		getline(cin, author);
-		string lowerAuthor = toLowerCase(author);
-		string upperAuthor = author;
-		vector<string> results;
-		searchBooksByAuthor(root, author, "", results);
+		cout << "Enter the author's name to search: ";
+		string prefix;
+		getline(cin, prefix);
+
+		vector<Node*> results;
+		searchBooksByAuthor(root, prefix, "", results);
 
 		if (!results.empty()) 
 		{
-			cout << "Books by \"" << upperAuthor << "\":" << endl;
-			for (const string& title : results) 
+			cout << "Results for \"" << prefix << "\":" << endl << endl;
+			for (Node* node : results)
 			{
-				cout << "- " << title << endl;
+				cout << "Title: " << node->originalTitle << endl;
+				cout << "Author: " << node->author << endl;
+				cout << "Genre: " << node->genre << endl;
+				cout << "Year: " << node->year << endl;
+				cout << "Page Number: " << node->pageNumber << endl;
+				cout << "-----------------------------" << endl;
+
 			}
+
 		}
 		else 
 		{
-			cout << "No books found by \"" << upperAuthor << "\"." << endl;
+			cout << "No books found by authors starting with \"" << prefix << "\"." << endl;
+		}
+	}
+
+
+	void searchBooksByTitleInput() const
+	{
+		cout << "Enter the title: ";
+		string prefix;
+		getline(cin, prefix);
+
+		vector<Node*> results;
+		searchBooksByTitle(root, prefix, "", results);
+
+		if (!results.empty())
+		{
+			cout << "Results for \"" << prefix << "\":" << endl << endl;
+			for (Node* node : results)
+			{
+				cout << "Title: " << node->originalTitle << endl;
+				cout << "Author: " << node->author << endl;
+				cout << "Genre: " << node->genre << endl;
+				cout << "Year: " << node->year << endl;
+				cout << "Page Number: " << node->pageNumber << endl;
+				cout << "-----------------------------" << endl;
+				
+			}
+
+			
+		}
+		else
+		{
+			cout << "No books found by \"" << prefix << "\"." << endl;
 		}
 	}
 
@@ -192,6 +273,7 @@ public:
 		Node* p = root;
 
 		string lowerTitle = toLowerCase(title);
+
 
 		for (char c : lowerTitle)
 		{

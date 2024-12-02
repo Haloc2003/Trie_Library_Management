@@ -91,12 +91,18 @@ int main()
 
                 if (search_choice == 1)
                 {
+                    /*
                     string searchTitle;
                     cin.ignore();
                     cout << "\nEnter a book title to search: ";
                     getline(cin, searchTitle);
                     library.printBookInfo(searchTitle);
                     cout << endl;
+                    */
+
+                    cin.ignore();
+                    library.searchBooksByTitleInput();
+
                 }
 
                 else if (search_choice == 2)
