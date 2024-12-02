@@ -39,9 +39,7 @@ private:
 	}
 
 
-	
-
-
+	//Skeleton for Genre search
 	void searchBooksByGenre(Node* node, const string& prefix, string currentGenre, vector<Node*>& results) const {
 		if (node->endOfWord) 
 		{
@@ -63,7 +61,7 @@ private:
 			}
 		}
 	}
-
+	//Skeleton for Author search
 	void searchBooksByAuthor(Node* node, const string& prefix, string currentAuthor, vector<Node*>& results) const 
 	{
 		if (node->endOfWord)
@@ -86,6 +84,7 @@ private:
 		}
 	}
 
+	//Skeleton for Title search
 	void searchBooksByTitle(Node* node, const string& prefix, string currentTitle, vector<Node*>& results) const
 	{
 		if (node->endOfWord)
@@ -148,7 +147,7 @@ public:
 
 	}
 
-
+	//Finds Specific Book
 	bool FindBook(const string& title)
 	{
 
@@ -173,7 +172,7 @@ public:
 	}
 
 	
-
+	//searches for books by genre
 	void searchBooksByGenreInput() const 
 	{
 		cout << "Enter the genre to search: ";
@@ -204,7 +203,7 @@ public:
 		}
 	}
 
-
+	//searches for books by author
 	void searchBooksByAuthorInput() const 
 	{
 		cout << "Enter the author's name to search: ";
@@ -235,7 +234,7 @@ public:
 		}
 	}
 
-
+	//searches for books by title
 	void searchBooksByTitleInput() const
 	{
 		cout << "Enter the title: ";
@@ -267,7 +266,7 @@ public:
 		}
 	}
 
-
+	//Prints a single book's Information
 	void printBookInfo(const string& title)
 	{
 		Node* p = root;
@@ -300,6 +299,7 @@ public:
 
 	}
 
+	//Indicates Empty trie
 	bool isEmpty()const
 	{
 		for (int i = 0; i < 95; i++)
@@ -310,6 +310,7 @@ public:
 		return true;
 	}
 
+	//Displays all books
 	void printAllBooks(Node* node, string prefix) const
 	{
 		if (node->endOfWord) {
@@ -325,6 +326,7 @@ public:
 
 	void printAllBooks() const { printAllBooks(root, ""); }
 
+	//Deletes Book from Trie
 	bool DeleteBook(string& title)
 	{
 		Node* currentNode = root;
@@ -388,7 +390,7 @@ public:
 		}
 	}
 
-
+	//Edits specific titles contents
 	bool EditBook(const string& title, const string& newAuthor, const string& newGenre, int newYear, int newPageNumber)
 	{
 		Node* p = root;
@@ -411,7 +413,6 @@ public:
 			p->year = newYear;
 			p->pageNumber = newPageNumber;
 
-			cout << "Book details updated successfully." << endl;
 			return true;
 		}
 		else
@@ -462,14 +463,10 @@ public:
 	{
 		fstream outfile;
 
-		outfile.open("library.txt", std::ofstream::out | std::ofstream::trunc);
-		outfile.close();
-
-
-		outfile.open("Library.txt", std::ios::app);
+		outfile.open("Library.txt", std::ofstream::out | std::ios::app);
 
 		if (node->endOfWord) {
-			outfile << prefix << endl;
+			outfile << node->originalTitle << endl;
 		}
 		for (int i = 0; i < 95; i++) {
 			if (node->children[i])

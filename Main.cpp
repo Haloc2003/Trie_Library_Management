@@ -14,6 +14,7 @@ int main()
     //Establishes a library from a text file
     library.ImportFromFile("BackgroundLibrary.txt");
 
+    //Menu
     while (choice != 9)
     {
         cout << "Library Menu:" << endl;
@@ -32,6 +33,7 @@ int main()
         if (choice == 9)
             break;
 
+        //Add Book Option
         if (choice == 1)
         {
             cin.ignore();
@@ -73,6 +75,8 @@ int main()
             cout << endl;
             library.NewBook(title, author, genre, release_date, page_number);
         }
+
+        //Searching Options
         else if (choice == 2)
         {
 
@@ -123,6 +127,8 @@ int main()
                 }
             }
         }
+
+        //Displaying Books Option
         else if (choice == 3)
         {
             if (library.isEmpty())
@@ -136,6 +142,8 @@ int main()
             }
             cout << endl;
         }
+
+        //Deleting Book Option
         else if (choice == 4)
         {
             string bookToDelete;
@@ -166,6 +174,7 @@ int main()
 
         }
 
+        //Printing all books to file option
         if (choice == 6)
         {
 
@@ -175,12 +184,18 @@ int main()
             }
             else
             {
+                fstream outfile;
+
+                outfile.open("library.txt", std::ofstream::out | std::ofstream::trunc);
+                outfile.close();
+
                 library.PrintAllToFile();
                 cout << "Printed to File" << endl;
             }
 
         }
 
+        //Importing a book from a file option
         if (choice == 7)
         {
             string filename;
@@ -193,6 +208,7 @@ int main()
             cout << "File imported.\n";
         }
 
+        //Edit a book option
         else if (choice == 8)
         {
             string bookToEdit;
