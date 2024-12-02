@@ -31,5 +31,6 @@
     <Text Include="LibraryInfo.txt" />
     <Text Include="ImportingFile.txt" />
     <Text Include="Library.txt" />
+    <Text Include="BackgroundLibrary.txt" />
   </ItemGroup>
 </Project>

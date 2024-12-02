@@ -5,6 +5,7 @@
 #include<iostream>
 #include<cctype>
 #include <fstream>
+#include <sstream>
 using namespace std;
 
 
@@ -302,42 +303,28 @@ public:
 	// Writes a book from a file to the trie
 	void ImportFromFile(string filename)
 	{
-		string title, author, genre;
+		string title, author, genre, line;
 		int page_number, year;
 
 		ifstream infile;
 		infile.open(filename);
 
-		getline(infile, title);
-		getline(infile, author);
-		getline(infile, genre);
-		cin.ignore();
-		infile >> year;
-		infile >> page_number;
-
-		Node* p = root;
-
-
-		for (char c : title)
+		while (getline(infile, title))
 		{
-			int index = getCharIndex(c);      //this has changed with the new function
+			getline(infile, author);
+			getline(infile, genre);
+			getline(infile, line);
+			year = atol(line.c_str());
+			getline(infile, line);
+			page_number = atol(line.c_str());
+			getline(infile, line);
 
-			if (index == -1) continue;
+			NewBook(title, author, genre, year, page_number);
 
-			if (p->children[index] == nullptr)
-			{
-				p->children[index] = new Node();
-			}
-
-			p = p->children[index];
 
 		}
 
-		p->endOfWord = true;
-		p->pageNumber = page_number;
-		p->author = author;
-		p->genre = genre;
-		p->year = year;
+		infile.close();
 	}
 
 };

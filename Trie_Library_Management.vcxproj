@@ -134,6 +134,7 @@
     <ClInclude Include="Node.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="BackgroundLibrary.txt" />
     <Text Include="ImportingFile.txt" />
     <Text Include="Library.txt" />
     <Text Include="LibraryInfo.txt" />
